@@ -9,5 +9,5 @@ import (
 func main() {
 	fmt.Println("Hello, world!")
 
-	fmt.Println(conv.CelsiusToFarhenheit(32.0))
+	fmt.Println(conv.CelsiusToFahrenheit(32))
 }
