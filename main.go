@@ -49,6 +49,9 @@ func main() {
 			writer.Write(record)
 		}
 	}
+
+	conv.CelsiusToFahrenheit(32.0)
+
 	footer := []string{"Data er basert på gyldig data (per 18.03.2023)(CC BY 4.0) fra Meteorologisk institutt (MET); endringen er gjort av Umit Yildirim"}
 	err = writer.Write(footer)
 	if err != nil {
