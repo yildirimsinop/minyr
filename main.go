@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+
 	"github.com/yildirimsinop/minyr/yr"
 )
 
@@ -39,16 +40,16 @@ func main() {
 
 				var input2 string
 				scanjn := bufio.NewScanner(os.Stdin)
-				fmt.Println("Tilbake til hovedmeny? (j/n)")
+				fmt.Println("Tilbake til hovedmeny? (y/n)")
 				for scanjn.Scan() {
 					input2 = scanjn.Text()
-					if input2 == "j" {
+					if input2 == "y" {
 						break
 					} else if input2 == "n" {
 						break
 					}
 				}
-				if input2 == "j" {
+				if input2 == "y" {
 					break
 				}
 			}
