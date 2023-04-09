@@ -61,10 +61,10 @@ func ConvertTemperature() {
 
 func checkFileExists() bool {
 	if _, err := os.Stat("kjevik-temp-fahr-20220318-20230318.csv"); err == nil {
-		fmt.Print("Filen eksisterer allerede. Vil du generere filen på nytt? (j/n): ")
+		fmt.Print("Filen eksisterer allerede. Vil du generere filen på nytt? (y/n): ")
 		var overwriteInput string
 		fmt.Scanln(&overwriteInput)
-		if strings.ToLower(overwriteInput) == "j" {
+		if strings.ToLower(overwriteInput) == "y" {
 			err := os.Remove("kjevik-temp-fahr-20220318-20230318.csv")
 			if err != nil {
 				log.Fatal(err)
