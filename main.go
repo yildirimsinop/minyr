@@ -1,61 +1,58 @@
 package main
 
 import (
-	"encoding/csv"
+	"bufio"
 	"fmt"
 	"os"
-	"strconv"
-
-	"github.com/yildirimsinop/funtemps/conv"
+	"github.com/yildirimsinop/minyr/yr"
 )
 
 func main() {
-	file, err := os.Open("kjevik-temp-celsius-20220318-20230318.csv")
-	if err != nil {
-		fmt.Println("Filen kunne ikke åpnes:", err)
-		return
-	}
-	defer file.Close()
+	var input string
+	scanner := bufio.NewScanner(os.Stdin)
 
-	reader := csv.NewReader(file)
-	reader.FieldsPerRecord = 0
-	records, err := reader.ReadAll()
-	if err != nil {
-		fmt.Println("CSV kunne ikke leses:", err)
-		return
-	}
+	for {
+		fmt.Println("Venligst velg convert, average eller exit:")
 
-	newFile, err := os.Create("kjevik-temp-fahr-20220318-20230318.csv")
-	if err != nil {
-		fmt.Println("Kunne ikke opprette ny fil:", err)
-		return
-	}
-	defer newFile.Close()
+		if !scanner.Scan() {
+			break
+		}
+		input = scanner.Text()
 
-	writer := csv.NewWriter(newFile)
-	defer writer.Flush()
+		switch input {
+		case "q", "exit":
+			fmt.Println("exit")
+			return
 
-	for i, record := range records {
-		if i == 0 {
-			writer.Write(record)
-		} else {
-			celsius, err := strconv.ParseFloat(record[1], 64)
-			if err != nil {
-				fmt.Printf("Linje %d ugyldig numerisk verdi: %+v\n", i+1, record)
-				continue
+		case "convert":
+			fmt.Println("Konverterer alle målingene gitt i grader Celsius til grader Fahrenheit...")
+			// funksjon som gjør åpner fil, leser linjer, gjør endringer og lagrer nye linjer i en ny fil
+			yr.ConvertTemperature()
+
+		case "average":
+			fmt.Println("Gjennomsnitt-kalkulator")
+
+			for {
+				// funksjon som deler opp datalinjene for å single ut det siste tallet, som er temperatur i celsius.
+				// Funksjonen tar så alle de siste tallene i filen og regner ut gjennomnsnitt i enten celsius eller fahr.
+				yr.AverageTemperature()
+
+				var input2 string
+				scanjn := bufio.NewScanner(os.Stdin)
+				fmt.Println("Tilbake til hovedmeny? (j/n)")
+				for scanjn.Scan() {
+					input2 = scanjn.Text()
+					if input2 == "j" {
+						break
+					} else if input2 == "n" {
+						break
+					}
+				}
+				if input2 == "j" {
+					break
+				}
 			}
-			fahrenheit := conv.CelsiusToFahrenheit(celsius)
-			record[1] = fmt.Sprintf("%.2f", fahrenheit)
-			writer.Write(record)
 		}
 	}
-
-	conv.CelsiusToFahrenheit(32.0)
-
-	footer := []string{"Data er basert på gyldig data (per 18.03.2023)(CC BY 4.0) fra Meteorologisk institutt (MET); endringen er gjort av Umit Yildirim"}
-	err = writer.Write(footer)
-	if err != nil {
-		fmt.Println("Kunne ikke skrive endelig tekst:", err)
-	}
-
+	fmt.Println("Avslutter program.")
 }
